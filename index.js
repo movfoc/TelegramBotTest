@@ -27,7 +27,8 @@ bot.start((ctx) => {
     const username = ctx.chat.first_name;
     ctx.reply(`Hello ${username}, Welcome to this group!`,
     Markup.inlineKeyboard([
-        [Markup.button.callback('inline button','info')]
+        [Markup.button.callback('Photo','info')],
+        [Markup.button.callback('Userid','userid')]
     ]))
 })
 
@@ -84,15 +85,16 @@ bot.command('round', (ctx) => {
         //console.log(rows.length);
         if (rows.length>0) {
             const result = (JSON.parse(JSON.stringify(rows)));
-            console.log(result);
-            /*for (let i = 0; i < rows.length; i++) {
-                displayed += result[i].RESULT + "|";
-              }*/
+            
+            for (let i = 0; i < rows.length; i++) {
+                displayed += result[i].message + "|";
+              }
+            
             console.log(`Selected message '${displayed}' in database for ${username}`)
             // Explicit usage
-            ctx.telegram.sendMessage(ctx.message.chat.id, `'${username}' said '${result}' in this round`)
+            ctx.telegram.sendMessage(ctx.message.chat.id, `${username} said: [${displayed} in this round`)
         }})    
-    },7000);
+    },8000);
     
 })
 
@@ -114,6 +116,12 @@ bot.action('info', async (ctx) => {
         }
     )
 })
+
+bot.action('userid', async (ctx) => {
+    const userID = ctx.from.id;
+    ctx.telegram.sendMessage(ctx.chat.id, `Your User ID: ${userID}`);
+})
+
 
 bot.launch()
 
